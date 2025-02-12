@@ -1,6 +1,7 @@
 import os
 
 from dotenv import load_dotenv
+import requests
 
 def main():
     load_dotenv()
@@ -17,17 +18,23 @@ def main():
     EMAIL_ADDRESS = get_env("EMAIL_ADDRESS")
     EMAIL_PASSWORD = get_env("EMAIL_PASSWORD")
 
-    # Fetch external IPv4
-    # ...
+    # Fetch current external IP
+    response = requests.get("https://api.ipify.org")
+    if response.status_code != 200:
+        print(f"Failed to fetch external IP (status code {response.status_code})")
+        exit(1)
+    curr_ip = response.text
 
-    # Compare fetched IP to stored IP
-    # ...
+    # Retrieve last IP and save current IP
+    last_ip = ""
+    with open("ip.txt", "w+") as f:
+        last_ip = f.readline()
+        f.seek(0)
+        f.write(curr_ip)
 
     # Send email if different
-    # ...
-
-    # Store new IP
-    # ...
+    if last_ip != "" and last_ip != curr_ip:
+        pass
 
 if __name__ == "__main__":
     main()
