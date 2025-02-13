@@ -1,4 +1,7 @@
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import os
+import smtplib
 
 from dotenv import load_dotenv
 import requests
@@ -34,7 +37,21 @@ def main():
 
     # Send email if different
     if last_ip != "" and last_ip != curr_ip:
-        pass
+        msg = MIMEMultipart()
+        msg["From"] = EMAIL_ADDRESS
+        msg["To"] = EMAIL_ADDRESS
+        msg["Subject"] = "IP-NOTIFY: EXTERNAL IP CHANGE"
+        msg.attach(MIMEText(f"Your external IP has changed\nLast IP: {last_ip}\nNew IP: {curr_ip}", "plain"))
+
+        try:
+            server = smtplib.SMTP(EMAIL_SERVER, EMAIL_PORT)
+            server.starttls()
+            server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            server.sendmail(EMAIL_ADDRESS, EMAIL_ADDRESS, msg.as_string())
+            server.quit()
+            print("Notification email sent")
+        except Exception as e:
+            print(f"Failed to send notification email: {e}")
 
 if __name__ == "__main__":
     main()
