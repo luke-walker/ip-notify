@@ -6,7 +6,7 @@ BASEDIR=$(dirname "$0")
 if ! [[ -d "/opt/ip-notify" ]] ; then
     sudo mkdir /opt/ip-notify
     sudo chmod g=wxr /opt/ip-notify
-    sudo chown :www-data /opt/ip-notify
+    sudo chown www-data:www-data /opt/ip-notify
 fi
 
 # Install script and dependencies
@@ -18,3 +18,5 @@ cp ${BASEDIR}/main.py /opt/ip-notify/main.py
 rm -rf /opt/ip-notify/env
 python -m venv /opt/ip-notify/env
 /opt/ip-notify/env/bin/python -m pip install -r ${BASEDIR}/requirements.txt
+sudo chown -R www-data:www-data /opt/ip-notify
+sudo chmod -R og=wxr /opt/ip-notify

@@ -20,6 +20,7 @@ def main():
     EMAIL_PORT = get_env("EMAIL_PORT")
     EMAIL_ADDRESS = get_env("EMAIL_ADDRESS")
     EMAIL_PASSWORD = get_env("EMAIL_PASSWORD")
+    SAVE_DIR = get_env("SAVE_DIR")
 
     # Fetch current external IP
     response = requests.get("https://api.ipify.org")
@@ -30,7 +31,7 @@ def main():
 
     # Retrieve last IP and save current IP
     last_ip = ""
-    with open("ip.txt", "w+") as f:
+    with open(f"{SAVE_DIR}/ip.txt", "w+") as f:
         last_ip = f.readline()
         f.seek(0)
         f.write(curr_ip)
